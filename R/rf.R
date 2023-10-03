@@ -1,0 +1,18 @@
+library('plyr')
+library("ipred")
+library("survival")
+library("survivalROC")
+library("glmnet")
+library('caret')
+library('randomForest')
+library("survminer")
+setwd("E:/demo/六个癌症/")
+x_xgtr <- read.csv("read.csv", skip = 4, row.names = 1,header = FALSE)
+x_xgtr <- t(x_xgtr)
+raw_data <- read.csv("read.csv",row.names = 1, header = FALSE)
+y_xgtr <- t(raw_data[4,])
+y_rf=as.factor(y_xgtr)
+myrf=randomForest(x=x_xgtr,y=y_rf, ntree = 500,importance=TRUE, max_depth = 10,
+                  proximity=TRUE)
+aa_pre=myrf$test$votes[,-1]
+write.csv(myrf$importance,'read.csv')
